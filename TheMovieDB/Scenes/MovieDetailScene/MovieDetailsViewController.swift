@@ -97,9 +97,9 @@ final class MovieDetailsViewController: BaseViewController {
     }
     
     private func setupMovieTitleLabelConstraints() {
-        movieTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        movieTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
         movieTitleLabel.topAnchor.constraint(equalTo: moviePosterImageView.bottomAnchor).isActive = true
-        movieTitleLabel.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        movieTitleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 10.0).isActive = true
         movieTitleLabel.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
         
         view.layoutIfNeeded()
@@ -113,9 +113,9 @@ final class MovieDetailsViewController: BaseViewController {
     }
     
     private func setupMovieOverviewTextViewConstraints() {
-        movieOverviewTextView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        movieOverviewTextView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5.0).isActive = true
         movieOverviewTextView.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor).isActive = true
-        movieOverviewTextView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        movieOverviewTextView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 5.0).isActive = true
         movieOverviewTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         view.layoutIfNeeded()
