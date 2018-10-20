@@ -44,16 +44,17 @@ extension MovieAPI: TargetType {
     var task: Task {
         switch self {
         case .nowPlaying(let page):
-            let parameters = [
-                Constants.MovieAPIConstants.page: "\(page)",
+            let parameters: [String: Any] = [
+                Constants.MovieAPIConstants.page: page,
                 Constants.MovieAPIConstants.APIKey.key: Constants.MovieAPIConstants.APIKey.value
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
             
         case .search(let query, let page):
-            let parameters = [
+            let parameters: [String: Any] = [
                 Constants.MovieAPIConstants.query: query,
-                Constants.MovieAPIConstants.page: "\(page)",
+                Constants.MovieAPIConstants.page: page,
+                Constants.MovieAPIConstants.includeAdults: false,
                 Constants.MovieAPIConstants.APIKey.key: Constants.MovieAPIConstants.APIKey.value
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)

@@ -21,6 +21,10 @@ final class NowPlayingViewController: BaseViewController {
     private var page = 0
     private var totalPages = 0
     
+    private var searchResultsMovies = [MovieViewModel]()
+    private var searchResultsPage = 0
+    private var searchResultsTotalPages = 0
+    
     /// Create and customize moviesCollectionView lazily.
     private lazy var moviesCollectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -88,6 +92,21 @@ final class NowPlayingViewController: BaseViewController {
         }
     }
     
+    @objc private func searchMovies() {
+        guard let query = moviesSearchViewController.searchBar.text, !query.isEmpty else {
+            moviesCollectionView.reloadData()
+            return
+            
+        }
+        presenter.searchMovies(with: query, page: searchResultsPage + 1) { [weak self] moviesList in
+            guard let self = self else { return }
+            self.searchResultsMovies += moviesList.results
+            self.searchResultsPage = moviesList.page
+            self.searchResultsTotalPages = moviesList.totalPages
+            self.moviesCollectionView.reloadData()
+        }
+    }
+    
     private func addMoviesCollectionView() {
         view.addSubview(moviesCollectionView)
         setupMoviesCollectionViewConstraints()
@@ -107,8 +126,8 @@ final class NowPlayingViewController: BaseViewController {
         return moviesSearchViewController.searchBar.text?.isEmpty ?? true
     }
     
-    private func isSeaching() -> Bool {
-        return moviesSearchViewController.isActive && searchBarIsEmpty()
+    private func isSearching() -> Bool {
+        return moviesSearchViewController.isActive
     }
 }
 
@@ -118,7 +137,14 @@ extension NowPlayingViewController: NowPlayingDisplayLogic {
 
 extension NowPlayingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        SceneCoordinator.shared.transition(to: Scene.movieDetails(movie: movies[indexPath.row])) {
+        let selectedMovie: MovieViewModel
+        if isSearching() {
+            selectedMovie = searchResultsMovies[indexPath.row]
+        } else {
+            selectedMovie = movies[indexPath.row]
+        }
+        
+        SceneCoordinator.shared.transition(to: Scene.movieDetails(movie: selectedMovie)) {
             
         }
     }
@@ -126,32 +152,52 @@ extension NowPlayingViewController: UICollectionViewDelegate {
 
 extension NowPlayingViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        if isSearching() {
+            return searchResultsMovies.count
+        } else {
+            return movies.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.reuseIdentifier, for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(posterURL: movies[indexPath.row].smallPosterPath)
+        
+        if isSearching() {
+            cell.configure(posterURL: searchResultsMovies[indexPath.row].smallPosterPath)
+        } else {
+            cell.configure(posterURL: movies[indexPath.row].smallPosterPath)
+        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == movies.count - 1 && page + 1 <= totalPages {
-            loadMovies()
+
+        if isSearching() {
+            if indexPath.row == searchResultsMovies.count - 1 && searchResultsPage + 1 <= searchResultsTotalPages {
+                searchMovies()
+            }
+        } else {
+            if indexPath.row == movies.count - 1 && page + 1 <= totalPages {
+                loadMovies()
+            }
         }
     }
 }
 
 extension NowPlayingViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else { return }
-        
-        print(text)
+        print("--- Will search for: \(searchController.searchBar.text) and clear all")
+        searchResultsMovies = []
+        searchResultsPage = 0
+        searchResultsTotalPages = 0
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(self.searchMovies), object: nil)
+        self.perform(#selector(self.searchMovies), with: nil, afterDelay: 0.5)
     }
 }
 
 extension NowPlayingViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        
+        moviesCollectionView.reloadData()
     }
 }

@@ -18,4 +18,11 @@ struct MoviesListViewModel {
         totalResults = moviesList.totalResults
         totalPages = moviesList.totalPages
     }
+    
+    init(with searchResults: SearchResults) {
+        results = searchResults.results.map(MovieViewModel.init)
+        page = searchResults.page
+        totalResults = searchResults.totalResults
+        totalPages = searchResults.totalPages
+    }
 }

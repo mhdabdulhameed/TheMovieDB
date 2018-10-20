@@ -10,6 +10,7 @@ import Foundation
 
 protocol NowPlayingPresentationLogic: class {
     func getNowPlayingMovies(page: Int, onComplete: @escaping (MoviesListViewModel) -> Void)
+    func searchMovies(with query: String, page: Int, onComplete: @escaping (MoviesListViewModel) -> Void)
 }
 
 final class NowPlayingPresenter: NowPlayingPresentationLogic {
@@ -36,5 +37,19 @@ final class NowPlayingPresenter: NowPlayingPresentationLogic {
         }
         
         networkManager.startRequest(api: .nowPlaying(page: page), onComplete: requestOnComplete)
+    }
+    
+    func searchMovies(with query: String, page: Int, onComplete: @escaping (MoviesListViewModel) -> Void) {
+        let requestOnComplete: (Result<SearchResults>) -> Void = { result in
+            switch result {
+            case .success(let searchResults):
+                onComplete(MoviesListViewModel(with: searchResults))
+            case .failure(let error):
+                // TODO show error.
+                print(error)
+            }
+        }
+        
+        networkManager.startRequest(api: .search(query: query, page: page), onComplete: requestOnComplete)
     }
 }

@@ -35,5 +35,8 @@ extension Constants {
         
         /// query key for search API
         static let query = "query"
+        
+        /// include_adult key for search API
+        static let includeAdults = "include_adult"
     }
 }
