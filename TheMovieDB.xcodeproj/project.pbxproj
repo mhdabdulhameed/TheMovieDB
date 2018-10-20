@@ -13,6 +13,12 @@
 		684D837F217B2D45000EE4E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 684D837D217B2D45000EE4E6 /* LaunchScreen.storyboard */; };
 		684D838A217B2D45000EE4E6 /* TheMovieDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684D8389217B2D45000EE4E6 /* TheMovieDBTests.swift */; };
 		684D8395217B2D45000EE4E6 /* TheMovieDBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684D8394217B2D45000EE4E6 /* TheMovieDBUITests.swift */; };
+		687E9F97217B2F6F00C3D156 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E9F96217B2F6F00C3D156 /* Constants.swift */; };
+		687E9F9A217B312600C3D156 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E9F99217B312600C3D156 /* NetworkManager.swift */; };
+		687E9F9C217B333E00C3D156 /* MovieAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E9F9B217B333E00C3D156 /* MovieAPI.swift */; };
+		687E9F9F217B339800C3D156 /* MovieAPIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E9F9E217B339800C3D156 /* MovieAPIConstants.swift */; };
+		687E9FA1217B372100C3D156 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E9FA0217B372100C3D156 /* Result.swift */; };
+		687E9FA3217B37AD00C3D156 /* MoyaNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687E9FA2217B37AD00C3D156 /* MoyaNetworkManager.swift */; };
 		7761E0C83837EBD7330BF4A6 /* Pods_TheMovieDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8549D4A4BC43B9BCB82325D /* Pods_TheMovieDB.framework */; };
 		A527041F5E93CA7C21E87311 /* Pods_TheMovieDBUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50101DAE3706F1072CF0AA5F /* Pods_TheMovieDBUITests.framework */; };
 /* End PBXBuildFile section */
@@ -51,6 +57,12 @@
 		684D8390217B2D45000EE4E6 /* TheMovieDBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheMovieDBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		684D8394217B2D45000EE4E6 /* TheMovieDBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMovieDBUITests.swift; sourceTree = "<group>"; };
 		684D8396217B2D45000EE4E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		687E9F96217B2F6F00C3D156 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		687E9F99217B312600C3D156 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		687E9F9B217B333E00C3D156 /* MovieAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAPI.swift; sourceTree = "<group>"; };
+		687E9F9E217B339800C3D156 /* MovieAPIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieAPIConstants.swift; sourceTree = "<group>"; };
+		687E9FA0217B372100C3D156 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		687E9FA2217B37AD00C3D156 /* MoyaNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaNetworkManager.swift; sourceTree = "<group>"; };
 		7958E6E975EB4B76E543CC45 /* Pods-TheMovieDBUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheMovieDBUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TheMovieDBUITests/Pods-TheMovieDBUITests.release.xcconfig"; sourceTree = "<group>"; };
 		D8549D4A4BC43B9BCB82325D /* Pods_TheMovieDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TheMovieDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5B8687722916D1EA4029C5A /* Pods-TheMovieDB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TheMovieDB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TheMovieDB/Pods-TheMovieDB.debug.xcconfig"; sourceTree = "<group>"; };
@@ -120,6 +132,10 @@
 		684D8373217B2D42000EE4E6 /* TheMovieDB */ = {
 			isa = PBXGroup;
 			children = (
+				687E9F98217B306A00C3D156 /* Coordinator */,
+				687E9F95217B2F5800C3D156 /* Skeleton */,
+				687E9F94217B2F4600C3D156 /* NetworkManager */,
+				687E9F93217B2F3700C3D156 /* UseCases */,
 				684D8374217B2D42000EE4E6 /* AppDelegate.swift */,
 				684D837B217B2D45000EE4E6 /* Assets.xcassets */,
 				684D837D217B2D45000EE4E6 /* LaunchScreen.storyboard */,
@@ -144,6 +160,48 @@
 				684D8396217B2D45000EE4E6 /* Info.plist */,
 			);
 			path = TheMovieDBUITests;
+			sourceTree = "<group>";
+		};
+		687E9F93217B2F3700C3D156 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		687E9F94217B2F4600C3D156 /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				687E9FA0217B372100C3D156 /* Result.swift */,
+				687E9F9B217B333E00C3D156 /* MovieAPI.swift */,
+				687E9F99217B312600C3D156 /* NetworkManager.swift */,
+				687E9FA2217B37AD00C3D156 /* MoyaNetworkManager.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		687E9F95217B2F5800C3D156 /* Skeleton */ = {
+			isa = PBXGroup;
+			children = (
+				687E9F9D217B337B00C3D156 /* Constants */,
+			);
+			path = Skeleton;
+			sourceTree = "<group>";
+		};
+		687E9F98217B306A00C3D156 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		687E9F9D217B337B00C3D156 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				687E9F96217B2F6F00C3D156 /* Constants.swift */,
+				687E9F9E217B339800C3D156 /* MovieAPIConstants.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		BC9939CFF94A33EF9EF68183 /* Pods */ = {
@@ -388,7 +446,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				687E9FA1217B372100C3D156 /* Result.swift in Sources */,
+				687E9F9A217B312600C3D156 /* NetworkManager.swift in Sources */,
+				687E9F9F217B339800C3D156 /* MovieAPIConstants.swift in Sources */,
+				687E9FA3217B37AD00C3D156 /* MoyaNetworkManager.swift in Sources */,
 				684D8375217B2D42000EE4E6 /* AppDelegate.swift in Sources */,
+				687E9F97217B2F6F00C3D156 /* Constants.swift in Sources */,
+				687E9F9C217B333E00C3D156 /* MovieAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
