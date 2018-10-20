@@ -30,7 +30,10 @@ final class NowPlayingViewController: BaseViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 0.0
         flowLayout.minimumInteritemSpacing = 0.0
-        flowLayout.itemSize = moviesCollectionViewItemSize
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let cellWidth = UIScreen.main.bounds.width / 2
+        let cellHeight = cellWidth * 1.5
+        flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.reuseIdentifier)
         collectionView.backgroundColor = Constants.NowPlayingSceneConstants.backgroundColor
@@ -50,10 +53,6 @@ final class NowPlayingViewController: BaseViewController {
         searchController.searchBar.barStyle = .black
         return searchController
     }()
-    
-    private var moviesCollectionViewItemSize: CGSize {
-        return CGSize(width: view.frame.width / 2, height: view.frame.width / 2)
-    }
     
     init(with presenter: NowPlayingPresentationLogic) {
         self.presenter = presenter
