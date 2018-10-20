@@ -17,6 +17,7 @@ final class MovieDetailsViewController: BaseViewController {
     /// Presneter
     private let presenter: MovieDetailsPresentationLogic
     
+    /// An imageView to display the movie's poster.
     private var moviePosterImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFit
@@ -24,6 +25,7 @@ final class MovieDetailsViewController: BaseViewController {
         return imageView
     }()
     
+    /// A label to display the movie's title.
     private var movieTitleLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textColor = Constants.MovieSceneConstants.foregroundColor
@@ -33,6 +35,7 @@ final class MovieDetailsViewController: BaseViewController {
         return label
     }()
     
+    /// A text view to display the movie's overview.
     private var movieOverviewTextView: UITextView = {
         let textView = UITextView()
         textView.textColor = Constants.MovieSceneConstants.foregroundColor
@@ -43,6 +46,7 @@ final class MovieDetailsViewController: BaseViewController {
         return textView
     }()
     
+    /// Initialize `MovieDetailsViewController` with a `MovieDetailsPresentationLogic` instance.
     init(with presenter: MovieDetailsPresentationLogic) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -60,6 +64,7 @@ final class MovieDetailsViewController: BaseViewController {
         loadData()
     }
     
+    /// Initializes the UI elements.
     private func customizeUI() {
         // Properties
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -67,6 +72,7 @@ final class MovieDetailsViewController: BaseViewController {
         self.edgesForExtendedLayout = []
     }
     
+    /// Adds all subviews to the view hierarchy and setups their constraints.
     private func addSubviews() {
         addMoviePosterImageView()
         addMovieTitleLabel()
@@ -75,11 +81,13 @@ final class MovieDetailsViewController: BaseViewController {
     
     // MARK: - Movie poster Image View
     
+    /// Adds `moviePosterImageView` to the view hierarchy and setups its constraints.
     private func addMoviePosterImageView() {
         view.addSubview(moviePosterImageView)
         setupMoviePosterImageViewConstraints()
     }
     
+    /// Sets the constraints of `moviePosterImageView`.
     private func setupMoviePosterImageViewConstraints() {
         moviePosterImageView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         moviePosterImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -91,11 +99,13 @@ final class MovieDetailsViewController: BaseViewController {
     
     // MARK: - Movie title label
     
+    /// Adds `movieTitleLabel` to the view hierarchy and setups its constraints.
     private func addMovieTitleLabel() {
         view.addSubview(movieTitleLabel)
         setupMovieTitleLabelConstraints()
     }
     
+    /// Sets the constraints of `movieTitleLabel`.
     private func setupMovieTitleLabelConstraints() {
         movieTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
         movieTitleLabel.topAnchor.constraint(equalTo: moviePosterImageView.bottomAnchor).isActive = true
@@ -107,11 +117,13 @@ final class MovieDetailsViewController: BaseViewController {
     
     // MARK: - Movie overview text view
     
+    /// Adds `movieOverviewTextView` to the view hierarchy and setups its constraints.
     private func addMovieOverviewTextView() {
         view.addSubview(movieOverviewTextView)
         setupMovieOverviewTextViewConstraints()
     }
     
+    /// Sets the constraints of `movieOverviewTextView`.
     private func setupMovieOverviewTextViewConstraints() {
         movieOverviewTextView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5.0).isActive = true
         movieOverviewTextView.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor).isActive = true
@@ -123,6 +135,7 @@ final class MovieDetailsViewController: BaseViewController {
     
     // MARK: - Data preparation
     
+    /// Fills to UI elements with data from the presenter.
     private func loadData() {
         SDWebImageHelper.setImage(for: moviePosterImageView, from: presenter.moviePosterURL)
         movieTitleLabel.text = presenter.movieTitle

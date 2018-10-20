@@ -17,9 +17,13 @@ final class NowPlayingViewController: BaseViewController {
     /// Presneter
     private let presenter: NowPlayingPresentationLogic
     
+    /// The data related to all movies.
+    
     private var allMovies = [MovieViewModel]()
     private var allMoviesPage = 0
     private var allMoviesTotalPages = 0
+    
+    /// The data related to search results.
     
     private var searchResultsMovies = [MovieViewModel]()
     private var searchResultsPage = 0
@@ -43,6 +47,7 @@ final class NowPlayingViewController: BaseViewController {
         return collectionView
     }()
     
+    /// Create and customize moviesSearchViewController lazily.
     private lazy var moviesSearchViewController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
@@ -54,6 +59,7 @@ final class NowPlayingViewController: BaseViewController {
         return searchController
     }()
     
+    /// Initialize `NowPlayingViewController` with a `NowPlayingPresentationLogic` instance.
     init(with presenter: NowPlayingPresentationLogic) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -73,6 +79,7 @@ final class NowPlayingViewController: BaseViewController {
     
     // MARK: - Private Methods
     
+    /// Initializes the UI elements.
     private func initializeUI() {
         // Title
         title = Constants.NowPlayingSceneConstants.title
@@ -82,6 +89,7 @@ final class NowPlayingViewController: BaseViewController {
         definesPresentationContext = true
     }
     
+    /// Uses the presenter to get now playing movies taking into consideration the current page.
     private func loadMovies() {
         presenter.getNowPlayingMovies(page: allMoviesPage + 1) { [weak self] moviesList in
             guard let self = self else { return }
@@ -102,6 +110,7 @@ final class NowPlayingViewController: BaseViewController {
         }
     }
     
+    /// Uses the presenter to get search results based on the text of the searchbar taking into consideration the current page.
     @objc private func searchMovies() {
         guard let query = moviesSearchViewController.searchBar.text, !query.isEmpty else {
             moviesCollectionView.reloadData()
@@ -117,11 +126,13 @@ final class NowPlayingViewController: BaseViewController {
         }
     }
     
+    /// Adds `moviesCollectionView` to the view hierarchy and setups its constraints.
     private func addMoviesCollectionView() {
         view.addSubview(moviesCollectionView)
         setupMoviesCollectionViewConstraints()
     }
     
+    /// Sets the constraints of `moviesCollectionView`.
     private func setupMoviesCollectionViewConstraints() {
         moviesCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         moviesCollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -136,6 +147,9 @@ final class NowPlayingViewController: BaseViewController {
         return moviesSearchViewController.searchBar.text?.isEmpty ?? true
     }
     
+    /// Checks whether the user is performing a search or not.
+    ///
+    /// - Returns: A Boolean indicating whether the search controller is active or not.
     private func isSearching() -> Bool {
         return moviesSearchViewController.isActive
     }
@@ -147,6 +161,8 @@ extension NowPlayingViewController: NowPlayingDisplayLogic {
 
 extension NowPlayingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        // If the user is searching, we'll use searchResultsMovies array. Else, we'll use allMovies.
         let selectedMovie: MovieViewModel
         if isSearching() {
             selectedMovie = searchResultsMovies[indexPath.row]
@@ -154,6 +170,7 @@ extension NowPlayingViewController: UICollectionViewDelegate {
             selectedMovie = allMovies[indexPath.row]
         }
         
+        // Perfrom navigation to movie details screen and pass the appropriate view model to it.
         SceneCoordinator.shared.transition(to: Scene.movieDetails(movie: selectedMovie)) {
             
         }
@@ -162,6 +179,7 @@ extension NowPlayingViewController: UICollectionViewDelegate {
 
 extension NowPlayingViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // If the user is searching, we'll use searchResultsMovies array. Else, we'll use allMovies.
         if isSearching() {
             return searchResultsMovies.count
         } else {
@@ -172,6 +190,7 @@ extension NowPlayingViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.reuseIdentifier, for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
         
+        // If the user is searching, we'll use searchResultsMovies array. Else, we'll use allMovies.
         if isSearching() {
             cell.configure(posterURL: searchResultsMovies[indexPath.row].smallPosterPath)
         } else {
@@ -183,6 +202,8 @@ extension NowPlayingViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 
+        // When the user scrolls and reaches the last cell we need to make a new call to get a new batch of the data (if there was a new batch).
+        // If the user is searching, we'll use searchResultsMovies array. Else, we'll use allMovies.
         if isSearching() {
             if indexPath.row == searchResultsMovies.count - 1 && searchResultsPage + 1 <= searchResultsTotalPages {
                 searchMovies()
@@ -197,9 +218,13 @@ extension NowPlayingViewController: UICollectionViewDataSource {
 
 extension NowPlayingViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        
+        // Whenever the user types a new letter to selects the searchbar we need to clear searchResultsData to start a clean new search.
         searchResultsMovies = []
         searchResultsPage = 0
         searchResultsTotalPages = 0
+        
+        // Add a delay between calls.
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(self.searchMovies), object: nil)
         self.perform(#selector(self.searchMovies), with: nil, afterDelay: 0.5)
     }
@@ -207,6 +232,7 @@ extension NowPlayingViewController: UISearchResultsUpdating {
 
 extension NowPlayingViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // The searchbar is inActive now so we need to reload the data to show allMovies instead of searchResultsMovies.
         moviesCollectionView.reloadData()
     }
 }

@@ -9,8 +9,14 @@
 import Foundation
 
 protocol MovieDetailsPresentationLogic: class {
+    
+    /// Returns the movie's poster `URL`.
     var moviePosterURL: URL { get }
+    
+    /// Returns the movie's title.
     var movieTitle: String { get }
+    
+    /// Returns the movie's overview.
     var movieOverview: String { get }
 }
 
@@ -21,6 +27,11 @@ final class MovieDetailsPresenter: MovieDetailsPresentationLogic {
     private let networkManager: NetworkManager
     private let movie: MovieViewModel
     
+    /// Initializes the `MovieDetailsPresenter`.
+    ///
+    /// - Parameters:
+    ///   - networkManager: An instance of any class that conforms to `NetworkManager`.
+    ///   - movie: An instance of `MovieViewModel` of the movie that is being displayed.
     init(networkManager: NetworkManager = MoyaNetworkManager.shared, movie: MovieViewModel) {
         self.networkManager = networkManager
         self.movie = movie

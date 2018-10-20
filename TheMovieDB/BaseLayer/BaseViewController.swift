@@ -16,6 +16,7 @@ class BaseViewController: UIViewController {
         customizeUI()
     }
     
+    /// A method to customize the appearance of the `BaseViewController` to give all the view controllers that inherit it a unified appearance.
     private func customizeUI() {
         // Colors
         let backgroundColor = Constants.NowPlayingSceneConstants.backgroundColor

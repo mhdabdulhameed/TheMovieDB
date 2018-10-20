@@ -9,13 +9,28 @@
 import Foundation
 
 struct MovieViewModel {
+    
+    /// The title of the movie.
     let title: String
+    
+    /// The overview of the movie.
     let overview: String
+    
+    /// The path of the original poster.
     let originalPosterPath: URL
+    
+    /// The path of a smaller version poster.
     let smallPosterPath: URL
+    
+    /// The path of the original backdrop.
     let originalBackdropPath: URL
+    
+    /// The path of a smaller version of the backdrop.
     let smallBackdropPath: URL
     
+    /// Initializes the `MovieViewModel` using `Movie` instance.
+    ///
+    /// - Parameter movie: An instance of `Movie`.
     init(with movie: Movie) {
         title = movie.title
         overview = movie.overview
@@ -30,6 +45,9 @@ struct MovieViewModel {
             smallPosterPath = smallPosterPathURL
             
         } else {
+            
+            // A default image to be used if the poster image path was not available.
+            
             originalPosterPath = URL(string: "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_1280.png")!
             smallPosterPath = URL(string: "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_1280.png")!
         }
@@ -42,6 +60,9 @@ struct MovieViewModel {
             originalBackdropPath = originalBackdropPathURL
             smallBackdropPath = smallBackdropPathURL
         } else {
+            
+            // A default image to be used if the backdrop image path was not available.
+            
             originalBackdropPath = URL(string: "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_1280.png")!
             smallBackdropPath = URL(string: "https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_1280.png")!
         }

@@ -9,7 +9,20 @@
 import Foundation
 
 protocol NowPlayingPresentationLogic: class {
+    
+    /// Gets a list of the movies that being played in the cinemas now.
+    ///
+    /// - Parameters:
+    ///   - page: The page number to retrieve.
+    ///   - onComplete: A completion handler that takes an instance of `MoviesListViewModel` which contains the page's elements.
     func getNowPlayingMovies(page: Int, onComplete: @escaping (MoviesListViewModel) -> Void)
+    
+    /// Searches for a query.
+    ///
+    /// - Parameters:
+    ///   - query: The string to search for.
+    ///   - page: The page number to retrieve.
+    ///   - onComplete: A completion handler that takes an instance of `MoviesListViewModel` which contains the page's elements.
     func searchMovies(with query: String, page: Int, onComplete: @escaping (MoviesListViewModel) -> Void)
 }
 
@@ -19,6 +32,10 @@ final class NowPlayingPresenter: NowPlayingPresentationLogic {
     
     private let networkManager: NetworkManager
     
+    /// Initializes the `MovieDetailsPresenter`.
+    ///
+    /// - Parameters:
+    ///   - networkManager: An instance of any class that conforms to `NetworkManager`.
     init(networkManager: NetworkManager = MoyaNetworkManager.shared) {
         self.networkManager = networkManager
     }

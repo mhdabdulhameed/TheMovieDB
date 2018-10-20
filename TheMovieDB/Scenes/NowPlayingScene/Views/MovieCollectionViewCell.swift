@@ -13,6 +13,7 @@ class MovieCollectionViewCell: UICollectionViewCell {
     /// `MovieCollectionViewCell` reuse identifier.
     static let reuseIdentifier = String(describing: MovieCollectionViewCell.self)
     
+    /// An ImageView instance to show the poster image.
     private lazy var posterImageView: UIImageView = {
         let imageView = UIImageView(frame: frame)
         imageView.contentMode = .scaleAspectFit
@@ -41,11 +42,13 @@ class MovieCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Private methods
     
+    /// Adds the `posterImageView` to the view hierarchy.
     private func addPosterImageView() {
         addSubview(posterImageView)
         setupPosterImageViewConstraints()
     }
     
+    /// Sets the constraints of the `posterImageView` in the appropriate way.
     private func setupPosterImageViewConstraints() {
         posterImageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         posterImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
