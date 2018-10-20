@@ -9,7 +9,7 @@
 import Moya
 
 enum MovieAPI {
-    case nowPlaying
+    case nowPlaying(page: Int)
 }
 
 extension MovieAPI: TargetType {
@@ -40,8 +40,11 @@ extension MovieAPI: TargetType {
     
     var task: Task {
         switch self {
-        case .nowPlaying:
-            let parameters = [Constants.MovieAPIConstants.APIKey.key: Constants.MovieAPIConstants.APIKey.value]
+        case .nowPlaying(let page):
+            let parameters = [
+                Constants.MovieAPIConstants.page: "\(page)",
+                Constants.MovieAPIConstants.APIKey.key: Constants.MovieAPIConstants.APIKey.value
+            ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         }
     }

@@ -9,7 +9,7 @@
 import Foundation
 
 protocol NowPlayingPresentationLogic: class {
-    func getNowPlayingMovies(onComplete: @escaping (MoviesListViewModel) -> Void)
+    func getNowPlayingMovies(page: Int, onComplete: @escaping (MoviesListViewModel) -> Void)
 }
 
 final class NowPlayingPresenter: NowPlayingPresentationLogic {
@@ -24,7 +24,7 @@ final class NowPlayingPresenter: NowPlayingPresentationLogic {
     
     // MARK: - NowPlayingPresentationLogic Protocol Conformance
     
-    func getNowPlayingMovies(onComplete: @escaping (MoviesListViewModel) -> Void) {
+    func getNowPlayingMovies(page: Int, onComplete: @escaping (MoviesListViewModel) -> Void) {
         let requestOnComplete: (Result<MoviesList>) -> Void = { result in
             switch result {
             case .success(let moviesList):
@@ -35,6 +35,6 @@ final class NowPlayingPresenter: NowPlayingPresentationLogic {
             }
         }
         
-        networkManager.startRequest(api: .nowPlaying, onComplete: requestOnComplete)
+        networkManager.startRequest(api: .nowPlaying(page: page), onComplete: requestOnComplete)
     }
 }

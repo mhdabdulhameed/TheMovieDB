@@ -26,5 +26,8 @@ extension Constants {
         
         /// Now Playing API
         static let nowPlaying = "movie/now_playing"
+        
+        /// page key for now playing API
+        static let page = "page"
     }
 }

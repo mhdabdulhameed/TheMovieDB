@@ -12,7 +12,7 @@ protocol NowPlayingDisplayLogic: class {
     
 }
 
-final class NowPlayingViewController: UIViewController {
+final class NowPlayingViewController: BaseViewController {
     
     /// Presneter
     private let presenter: NowPlayingPresentationLogic
@@ -54,13 +54,7 @@ final class NowPlayingViewController: UIViewController {
         
         customizeUI()
         addMoviesCollectionView()
-        
-        presenter.getNowPlayingMovies { [weak self] moviesList in
-            self?.movies += moviesList.results
-            self?.page = moviesList.page
-            self?.totalPages = moviesList.totalPages
-            self?.moviesCollectionView.reloadData()
-        }
+        loadMovies()
     }
     
     // MARK: - Private Methods
@@ -68,19 +62,16 @@ final class NowPlayingViewController: UIViewController {
     private func customizeUI() {
         // Title
         title = Constants.NowPlayingSceneConstants.title
-        
-        // Colors
-        let backgroundColor = Constants.NowPlayingSceneConstants.backgroundColor
-        let foregroundColor = Constants.NowPlayingSceneConstants.foregroundColor
-        view.backgroundColor = backgroundColor
-        navigationController?.navigationBar.tintColor = foregroundColor
-        navigationController?.navigationBar.barTintColor = backgroundColor
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: foregroundColor]
-        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: foregroundColor]
-        
-        // Properties
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = false
+    }
+    
+    private func loadMovies() {
+        presenter.getNowPlayingMovies(page: page + 1) { [weak self] moviesList in
+            guard let self = self else { return }
+            self.movies += moviesList.results
+            self.page = moviesList.page
+            self.totalPages = moviesList.totalPages
+            self.moviesCollectionView.reloadData()
+        }
     }
     
     private func addMoviesCollectionView() {
@@ -103,7 +94,11 @@ extension NowPlayingViewController: NowPlayingDisplayLogic {
 }
 
 extension NowPlayingViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        SceneCoordinator.shared.transition(to: Scene.movieDetails(movie: movies[indexPath.row])) {
+            
+        }
+    }
 }
 
 extension NowPlayingViewController: UICollectionViewDataSource {
@@ -115,5 +110,11 @@ extension NowPlayingViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.reuseIdentifier, for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
         cell.configure(posterURL: movies[indexPath.row].smallPosterPath)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == movies.count - 1 && page + 1 <= totalPages {
+            loadMovies()
+        }
     }
 }

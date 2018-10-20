@@ -23,6 +23,7 @@ class SDWebImageHelper {
     ///   - completed: A completion handler to be called when the URL is downloaded and set in the image view.
     static func setImage(for imageView: UIImageView, from url: URL, completed: (() -> Void)? = nil) {
         imageView.sd_showActivityIndicatorView()
+        imageView.sd_setIndicatorStyle(.whiteLarge)
         imageView.sd_setImage(with: url) { _, _, _, _ in completed?() }
     }
 }

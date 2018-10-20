@@ -20,6 +20,7 @@ protocol TargetScene {
 
 enum Scene {
     case nowPlaying
+    case movieDetails(movie: MovieViewModel)
 }
 
 extension Scene: TargetScene {
@@ -31,6 +32,12 @@ extension Scene: TargetScene {
             presenter.viewController = viewController
             let navigationController = UINavigationController(rootViewController: viewController)
             return .root(navigationController)
+            
+        case .movieDetails(let movie):
+            let presenter = MovieDetailsPresenter(movie: movie)
+            let viewController = MovieDetailsViewController(with: presenter)
+            presenter.viewController = viewController
+            return .push(viewController)
         }
     }
 }
