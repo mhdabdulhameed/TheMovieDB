@@ -17,9 +17,9 @@ final class NowPlayingViewController: BaseViewController {
     /// Presneter
     private let presenter: NowPlayingPresentationLogic
     
-    private var movies = [MovieViewModel]()
-    private var page = 0
-    private var totalPages = 0
+    private var allMovies = [MovieViewModel]()
+    private var allMoviesPage = 0
+    private var allMoviesTotalPages = 0
     
     private var searchResultsMovies = [MovieViewModel]()
     private var searchResultsPage = 0
@@ -48,7 +48,6 @@ final class NowPlayingViewController: BaseViewController {
         searchController.searchBar.placeholder = Constants.NowPlayingSceneConstants.searchbarPlaceHolder
         searchController.searchBar.tintColor = Constants.NowPlayingSceneConstants.foregroundColor
         searchController.searchBar.barStyle = .black
-        definesPresentationContext = true
         return searchController
     }()
     
@@ -80,14 +79,16 @@ final class NowPlayingViewController: BaseViewController {
         title = Constants.NowPlayingSceneConstants.title
         
         navigationItem.searchController = moviesSearchViewController
+        
+        definesPresentationContext = true
     }
     
     private func loadMovies() {
-        presenter.getNowPlayingMovies(page: page + 1) { [weak self] moviesList in
+        presenter.getNowPlayingMovies(page: allMoviesPage + 1) { [weak self] moviesList in
             guard let self = self else { return }
-            self.movies += moviesList.results
-            self.page = moviesList.page
-            self.totalPages = moviesList.totalPages
+            self.allMovies += moviesList.results
+            self.allMoviesPage = moviesList.page
+            self.allMoviesTotalPages = moviesList.totalPages
             self.moviesCollectionView.reloadData()
         }
     }
@@ -141,7 +142,7 @@ extension NowPlayingViewController: UICollectionViewDelegate {
         if isSearching() {
             selectedMovie = searchResultsMovies[indexPath.row]
         } else {
-            selectedMovie = movies[indexPath.row]
+            selectedMovie = allMovies[indexPath.row]
         }
         
         SceneCoordinator.shared.transition(to: Scene.movieDetails(movie: selectedMovie)) {
@@ -155,7 +156,7 @@ extension NowPlayingViewController: UICollectionViewDataSource {
         if isSearching() {
             return searchResultsMovies.count
         } else {
-            return movies.count
+            return allMovies.count
         }
     }
     
@@ -165,7 +166,7 @@ extension NowPlayingViewController: UICollectionViewDataSource {
         if isSearching() {
             cell.configure(posterURL: searchResultsMovies[indexPath.row].smallPosterPath)
         } else {
-            cell.configure(posterURL: movies[indexPath.row].smallPosterPath)
+            cell.configure(posterURL: allMovies[indexPath.row].smallPosterPath)
         }
         
         return cell
@@ -178,7 +179,7 @@ extension NowPlayingViewController: UICollectionViewDataSource {
                 searchMovies()
             }
         } else {
-            if indexPath.row == movies.count - 1 && page + 1 <= totalPages {
+            if indexPath.row == allMovies.count - 1 && allMoviesPage + 1 <= allMoviesTotalPages {
                 loadMovies()
             }
         }
