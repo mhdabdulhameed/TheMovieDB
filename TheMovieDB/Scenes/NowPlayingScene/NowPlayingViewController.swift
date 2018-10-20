@@ -36,6 +36,18 @@ final class NowPlayingViewController: BaseViewController {
         return collectionView
     }()
     
+    private lazy var moviesSearchViewController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = Constants.NowPlayingSceneConstants.searchbarPlaceHolder
+        searchController.searchBar.tintColor = Constants.NowPlayingSceneConstants.foregroundColor
+        searchController.searchBar.barStyle = .black
+        definesPresentationContext = true
+        return searchController
+    }()
+    
     private var moviesCollectionViewItemSize: CGSize {
         return CGSize(width: view.frame.width / 2, height: view.frame.width / 2)
     }
@@ -52,16 +64,18 @@ final class NowPlayingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        customizeUI()
+        initializeUI()
         addMoviesCollectionView()
         loadMovies()
     }
     
     // MARK: - Private Methods
     
-    private func customizeUI() {
+    private func initializeUI() {
         // Title
         title = Constants.NowPlayingSceneConstants.title
+        
+        navigationItem.searchController = moviesSearchViewController
     }
     
     private func loadMovies() {
@@ -86,6 +100,15 @@ final class NowPlayingViewController: BaseViewController {
         moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         view.layoutIfNeeded()
+    }
+    
+    /// Returns true if the text is empty or nil
+    private func searchBarIsEmpty() -> Bool {
+        return moviesSearchViewController.searchBar.text?.isEmpty ?? true
+    }
+    
+    private func isSeaching() -> Bool {
+        return moviesSearchViewController.isActive && searchBarIsEmpty()
     }
 }
 
@@ -116,5 +139,19 @@ extension NowPlayingViewController: UICollectionViewDataSource {
         if indexPath.row == movies.count - 1 && page + 1 <= totalPages {
             loadMovies()
         }
+    }
+}
+
+extension NowPlayingViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else { return }
+        
+        print(text)
+    }
+}
+
+extension NowPlayingViewController: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
     }
 }

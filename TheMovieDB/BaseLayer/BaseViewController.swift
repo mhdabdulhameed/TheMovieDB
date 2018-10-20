@@ -22,12 +22,11 @@ class BaseViewController: UIViewController {
         let foregroundColor = Constants.NowPlayingSceneConstants.foregroundColor
         view.backgroundColor = backgroundColor
         navigationController?.navigationBar.tintColor = foregroundColor
-        navigationController?.navigationBar.barTintColor = backgroundColor
+        navigationController?.navigationBar.barTintColor = .clear
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: foregroundColor]
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: foregroundColor]
         
         // Properties
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.isTranslucent = false
     }
 }

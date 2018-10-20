@@ -63,6 +63,8 @@ final class MovieDetailsViewController: BaseViewController {
     private func customizeUI() {
         // Properties
         navigationController?.navigationBar.prefersLargeTitles = false
+        
+        self.edgesForExtendedLayout = []
     }
     
     private func addSubviews() {

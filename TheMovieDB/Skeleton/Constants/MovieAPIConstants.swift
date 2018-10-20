@@ -27,7 +27,13 @@ extension Constants {
         /// Now Playing API
         static let nowPlaying = "movie/now_playing"
         
+        /// Search API
+        static let search = "search/movie"
+        
         /// page key for now playing API
         static let page = "page"
+        
+        /// query key for search API
+        static let query = "query"
     }
 }

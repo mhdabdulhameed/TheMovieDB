@@ -18,5 +18,8 @@ extension Constants {
         /// Scene colors
         static let foregroundColor = UIColor.white
         static let backgroundColor = UIColor(red: 20.0/255.0, green: 20.0/255.0, blue: 20.0/255.0, alpha: 255.0)
+        
+        /// Searchbar place holder
+        static let searchbarPlaceHolder = NSLocalizedString("Search for movies...", comment: "The place holder of the search bar of main screen")
     }
 }

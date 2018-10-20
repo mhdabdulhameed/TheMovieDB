@@ -16,7 +16,7 @@ extension Constants {
         static let foregroundColor = UIColor.white
         
         /// Movie title label font size
-        static let movieTitleFontSize: CGFloat = 22.0
+        static let movieTitleFontSize: CGFloat = 20.0
         static let movieOverviewFontSize: CGFloat = 14.0
     }
 }

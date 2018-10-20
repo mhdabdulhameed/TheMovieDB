@@ -10,6 +10,7 @@ import Moya
 
 enum MovieAPI {
     case nowPlaying(page: Int)
+    case search(query: String, page: Int)
 }
 
 extension MovieAPI: TargetType {
@@ -24,12 +25,14 @@ extension MovieAPI: TargetType {
         switch self {
         case .nowPlaying:
             return Constants.MovieAPIConstants.nowPlaying
+        case .search:
+            return Constants.MovieAPIConstants.search
         }
     }
     
     var method: Method {
         switch self {
-        case .nowPlaying:
+        case .nowPlaying, .search:
             return .get
         }
     }
@@ -46,12 +49,20 @@ extension MovieAPI: TargetType {
                 Constants.MovieAPIConstants.APIKey.key: Constants.MovieAPIConstants.APIKey.value
             ]
             return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
+            
+        case .search(let query, let page):
+            let parameters = [
+                Constants.MovieAPIConstants.query: query,
+                Constants.MovieAPIConstants.page: "\(page)",
+                Constants.MovieAPIConstants.APIKey.key: Constants.MovieAPIConstants.APIKey.value
+            ]
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.default)
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .nowPlaying:
+        case .nowPlaying, .search:
             return nil
         }
     }
