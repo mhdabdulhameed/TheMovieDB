@@ -15,7 +15,7 @@ extension Constants {
         /// Scene title
         static let title = NSLocalizedString("Movies", comment: "Now Playing Screen Title")
         
-        /// Scene background color
+        /// Scene colors
         static let foregroundColor = UIColor.white
         static let backgroundColor = UIColor(red: 20.0/255.0, green: 20.0/255.0, blue: 20.0/255.0, alpha: 255.0)
     }

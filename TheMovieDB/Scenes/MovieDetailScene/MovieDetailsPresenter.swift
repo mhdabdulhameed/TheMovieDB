@@ -9,7 +9,9 @@
 import Foundation
 
 protocol MovieDetailsPresentationLogic: class {
-    var posterURL: URL { get }
+    var moviePosterURL: URL { get }
+    var movieTitle: String { get }
+    var movieOverview: String { get }
 }
 
 final class MovieDetailsPresenter: MovieDetailsPresentationLogic {
@@ -26,7 +28,15 @@ final class MovieDetailsPresenter: MovieDetailsPresentationLogic {
     
     // MARK: - MovieDetailsPresentationLogic Protocol Conformance
     
-    var posterURL: URL {
+    var moviePosterURL: URL {
         return movie.originalBackdropPath
+    }
+    
+    var movieTitle: String {
+        return movie.title
+    }
+    
+    var movieOverview: String {
+        return movie.overview
     }
 }
