@@ -28,5 +28,6 @@ class BaseViewController: UIViewController {
         
         // Properties
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.barStyle = .blackTranslucent
     }
 }

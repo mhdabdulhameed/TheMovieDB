@@ -88,7 +88,17 @@ final class NowPlayingViewController: BaseViewController {
             self.allMovies += moviesList.results
             self.allMoviesPage = moviesList.page
             self.allMoviesTotalPages = moviesList.totalPages
-            self.moviesCollectionView.reloadData()
+            
+            if self.moviesCollectionView.numberOfItems(inSection: 0) == 0 {
+                self.moviesCollectionView.reloadData()
+            } else {
+                let newIndexPaths = (self.allMovies.count - 20...self.allMovies.count - 1).map({ index in
+                    IndexPath(item: index, section: 0)
+                })
+                self.moviesCollectionView.performBatchUpdates({
+                    self.moviesCollectionView.insertItems(at: newIndexPaths)
+                })
+            }
         }
     }
     
@@ -187,7 +197,6 @@ extension NowPlayingViewController: UICollectionViewDataSource {
 
 extension NowPlayingViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        print("--- Will search for: \(searchController.searchBar.text) and clear all")
         searchResultsMovies = []
         searchResultsPage = 0
         searchResultsTotalPages = 0

@@ -17,7 +17,7 @@ final class MoyaNetworkManager: NetworkManager {
     }()
     
     lazy var plugins: [PluginType] = {
-        return [NetworkLoggerPlugin(verbose: true)]
+        return [/*NetworkLoggerPlugin(verbose: true)*/]
     }()
     
     private init() { }
