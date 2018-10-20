@@ -9,13 +9,22 @@
 extension Constants {
     enum MovieAPIConstants {
         
-        // API Key
+        /// API Key
         static let APIKey = (key: "api_key", value: "cccb9ec4f2fadd35d3b0591378f2b4bd")
         
-        // Base URL
+        /// Base URL
         static let baseURL = "https://api.themoviedb.org/3/"
         
-        // Now Playing API
+        /// Images URL
+        static let imagesURL = "https://image.tmdb.org/t/p/"
+        
+        /// Small image
+        static let smallImage = "w185/"
+        
+        /// Original image
+        static let originalImage = "original/"
+        
+        /// Now Playing API
         static let nowPlaying = "movie/now_playing"
     }
 }

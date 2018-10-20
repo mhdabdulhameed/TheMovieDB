@@ -9,7 +9,7 @@
 import Foundation
 
 protocol NowPlayingPresentationLogic: class {
-    
+    func getNowPlayingMovies(onComplete: @escaping (MoviesListViewModel) -> Void)
 }
 
 final class NowPlayingPresenter: NowPlayingPresentationLogic {
@@ -20,5 +20,21 @@ final class NowPlayingPresenter: NowPlayingPresentationLogic {
     
     init(networkManager: NetworkManager = MoyaNetworkManager.shared) {
         self.networkManager = networkManager
+    }
+    
+    // MARK: - NowPlayingPresentationLogic Protocol Conformance
+    
+    func getNowPlayingMovies(onComplete: @escaping (MoviesListViewModel) -> Void) {
+        let requestOnComplete: (Result<MoviesList>) -> Void = { result in
+            switch result {
+            case .success(let moviesList):
+                onComplete(MoviesListViewModel(with: moviesList))
+            case .failure(let error):
+                // TODO show error.
+                print(error)
+            }
+        }
+        
+        networkManager.startRequest(api: .nowPlaying, onComplete: requestOnComplete)
     }
 }

@@ -17,20 +17,28 @@ final class NowPlayingViewController: UIViewController {
     /// Presneter
     private let presenter: NowPlayingPresentationLogic
     
-    /// Create and customize albumsCollectionView lazily.
-//    private lazy var albumsCollectionView: UICollectionView = {
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.minimumLineSpacing = 1.0
-//        flowLayout.minimumInteritemSpacing = 1.0
-//        flowLayout.itemSize = albumsCollectionViewItemSize
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-//        collectionView.register(UINib(nibName: Constants.NibFilesNames.albumCollectionViewCell, bundle: nil),
-//                                forCellWithReuseIdentifier: AlbumCollectionViewCell.reuseIdentifier)
-//        collectionView.backgroundColor=UIColor.white
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.isHidden = true
-//        return collectionView
-//    }()
+    private var movies = [MovieViewModel]()
+    private var page = 0
+    private var totalPages = 0
+    
+    /// Create and customize moviesCollectionView lazily.
+    private lazy var moviesCollectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 0.0
+        flowLayout.minimumInteritemSpacing = 0.0
+        flowLayout.itemSize = moviesCollectionViewItemSize
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.reuseIdentifier)
+        collectionView.backgroundColor = Constants.NowPlayingSceneConstants.backgroundColor
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
+    }()
+    
+    private var moviesCollectionViewItemSize: CGSize {
+        return CGSize(width: view.frame.width / 2, height: view.frame.width / 2)
+    }
     
     init(with presenter: NowPlayingPresentationLogic) {
         self.presenter = presenter
@@ -45,6 +53,14 @@ final class NowPlayingViewController: UIViewController {
         super.viewDidLoad()
         
         customizeUI()
+        addMoviesCollectionView()
+        
+        presenter.getNowPlayingMovies { [weak self] moviesList in
+            self?.movies += moviesList.results
+            self?.page = moviesList.page
+            self?.totalPages = moviesList.totalPages
+            self?.moviesCollectionView.reloadData()
+        }
     }
     
     // MARK: - Private Methods
@@ -66,8 +82,38 @@ final class NowPlayingViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.isTranslucent = false
     }
+    
+    private func addMoviesCollectionView() {
+        view.addSubview(moviesCollectionView)
+        setupMoviesCollectionViewConstraints()
+    }
+    
+    private func setupMoviesCollectionViewConstraints() {
+        moviesCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        moviesCollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        moviesCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        moviesCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        view.layoutIfNeeded()
+    }
 }
 
 extension NowPlayingViewController: NowPlayingDisplayLogic {
     
+}
+
+extension NowPlayingViewController: UICollectionViewDelegate {
+    
+}
+
+extension NowPlayingViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.reuseIdentifier, for: indexPath) as? MovieCollectionViewCell else { return UICollectionViewCell() }
+        cell.configure(posterURL: movies[indexPath.row].smallPosterPath)
+        return cell
+    }
 }

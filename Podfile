@@ -7,6 +7,7 @@ target 'TheMovieDB' do
 
   # Pods for TheMovieDB
   pod 'Moya'
+  pod 'SDWebImage'
 
   target 'TheMovieDBTests' do
     inherit! :search_paths
